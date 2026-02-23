@@ -5,20 +5,21 @@ export class CatalogService{
     
     constructor(private _repository:ICatalogRepository){
     }
-    createProduct(input:Product){
-
+   async createProduct(input:Product){
+      const data = await this._repository.create(input);
+      return data;
     }
 
-    updateProduct(input:Product){
+    async updateProduct(input:Product){
 
     }
-    getProducts(limit:number,offset:number){
+    async getProducts(limit:number,offset:number){
 
     }
-     getProduct(id:number){
+     async getProduct(id:number){
 
     }
-    deleteProduct(id:number){
+     async deleteProduct(id:number){
 
     }
 }
