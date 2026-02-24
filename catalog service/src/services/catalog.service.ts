@@ -21,9 +21,12 @@ export class CatalogService{
         return this._repository.find(limit,offset);
     }
      async getProduct(id:number){
-
+        const data = await this._repository.findOne(id);
+        if(!data) throw new Error("Product not found");
+        return data;
     }
      async deleteProduct(id:number){
-
+        const data = await this._repository.delete(id);
+        return data;
     }
 }

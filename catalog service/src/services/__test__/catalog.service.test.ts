@@ -128,4 +128,55 @@ describe("catalogService", () => {
       expect(result).toHaveLength(0);
     });
   });
+
+  describe("getProduct", () => {
+    test("should return a product by id", async () => {
+      const service = new CatalogService(repository);
+
+      const reqBody = mockProduct();
+      const createdProduct = await service.createProduct(reqBody);
+      const result = await service.getProduct(createdProduct.id!);
+      expect(result).toMatchObject({
+        id: createdProduct.id,
+        name: expect.any(String),
+        description: expect.any(String),
+        price: expect.any(Number),
+        stock: expect.any(Number),
+      });
+    });
+
+    test("should throw an error if product is not found", async () => {
+      const service = new CatalogService(repository);
+
+      jest
+        .spyOn(repository, "findOne")
+        .mockRejectedValue(new Error("Product not found"));
+      await expect(service.getProduct(999)).rejects.toThrow(
+        "Product not found",
+      );
+    });
+  });
+
+  describe("deleteProduct", () => {
+    test("should delete a product by id", async () => {
+      const service = new CatalogService(repository);
+
+      const reqBody = mockProduct();
+      const createdProduct = await service.createProduct(reqBody);
+      const result = await service.deleteProduct(createdProduct.id!);
+      expect(result).toMatchObject({});
+    });
+
+    test("should throw an error if product to delete is not found", async () => {
+      const service = new CatalogService(repository);
+
+      jest
+        .spyOn(repository, "delete")
+        .mockRejectedValue(new Error("Product not found"));
+      await expect(service.deleteProduct(999)).rejects.toThrow(
+        "Product not found",
+      );
+    });
+  });
 });
+
