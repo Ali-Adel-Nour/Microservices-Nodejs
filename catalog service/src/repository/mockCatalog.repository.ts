@@ -25,8 +25,8 @@ export class MockCatalogRepository implements ICatalogRepository {
         return {};
     }
 
-    async find(): Promise<Product[]> {
-        return this.products;
+    async find(limit: number, offset: number): Promise<Product[]> {
+        return this.products.slice(offset, offset + limit);
     }
 
     async findOne(id: number): Promise<Product> {
