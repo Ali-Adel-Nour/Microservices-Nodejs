@@ -2,14 +2,8 @@ import { ICatalogRepository } from "../../interface/catalogRepository.interface"
 import { MockCatalogRepository } from "../../repository/mockCatalog.repository";
 import { CatalogService } from "../catalog.service";
 import { faker } from "@faker-js/faker";
-import { Factory } from "rosie";
+import { ProductFactory } from "../../utils/features";
 
-const productFactory = new Factory()
-  .attr("id", () => faker.number.int({ min: 1, max: 1000 }))
-  .attr("name", () => faker.commerce.productName())
-  .attr("description", () => faker.commerce.productDescription())
-  .attr("price", () => +faker.commerce.price())
-  .attr("stock", () => faker.number.int({ min: 10, max: 100 }));
 
 const mockProduct = () => {
   return {
@@ -107,7 +101,7 @@ describe("catalogService", () => {
     test("should return a list of products", async () => {
       const service = new CatalogService(repository);
       const randomLimit = faker.number.int({ min: 1, max: 10 });
-      const products = productFactory.buildList(randomLimit);
+      const products = ProductFactory.buildList(randomLimit);
       for (const product of products) {
         await repository.create(product);
       }
