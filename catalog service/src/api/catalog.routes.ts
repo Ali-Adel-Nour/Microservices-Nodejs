@@ -1,11 +1,11 @@
 import express, { NextFunction, Request, Response } from "express";
 import { CatalogService } from "../services/catalog.service";
-import { MockCatalogRepository } from "../repository/mockCatalog.repository";
+import { CatalogRepository } from "../repository/catalog.repository";
 import { requestValidator } from "../utils/features/requestValidator";
 import { CreateProductDto } from "../dto/product.dto";
 
 const router = express.Router();
-export const service = new CatalogService(new MockCatalogRepository());
+export const service = new CatalogService(new CatalogRepository());
 
 router.post("/products", async (req, res, next) => {
   const { errors, input } = await requestValidator(CreateProductDto, req.body);
