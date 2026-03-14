@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  postgres:
+  catalog_db_server:
     image: postgres:16-alpine
     container_name: catalog_postgres
     restart: always
@@ -14,5 +14,20 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  order_db_server:
+    image: postgres:16-alpine
+    container_name: order_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: order_db
+      POSTGRES_PASSWORD: order_password
+      POSTGRES_DB: order
+    ports:
+      - "5437:5432"
+    volumes:
+      - order_postgres_data:/var/lib/postgresql/data
+
 volumes:
   postgres_data:
+  order_postgres_data:
+
