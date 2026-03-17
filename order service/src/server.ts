@@ -1,24 +1,28 @@
 import "dotenv/config";
 import expressApp from "./expressApp";
+import logger from "./utils/logger";
 
-const PORT = process.env.APP_PORT ;
+const PORT = process.env.APP_PORT || 9000;
 
-export const StartServer = async() => {
+export const StartServer = async () => {
+    process.on("uncaughtException", (err) => {
+        logger.error("Uncaught Exception", { err });
+        process.exit(1);
+    });
+
+    process.on("unhandledRejection", (reason) => {
+        logger.error("Unhandled Rejection", { reason });
+        process.exit(1);
+    });
 
   expressApp.listen(PORT, () => {
-    console.log(`App is running on port ${PORT}`);
-});
-
-process.on("uncaughtException",async(err) => {
-    console.log("Uncaught Exception: ", err);
-    process.exit(1);
-
-})
-}
+        logger.info(`App is running on port ${PORT}`);
+    });
+};
 
 StartServer().then(() => {
-    console.log("Server started successfully");
+        logger.info("Server started successfully");
 }).catch((err) => {
-    console.log("Error starting server: ", err);
+        logger.error("Error starting server", { err });
     process.exit(1);
 });
